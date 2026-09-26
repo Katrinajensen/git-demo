@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure It Out — Roles Radar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-roles">
+<div class="wrap">
+
+  <div class="brand-row">
+    <a href="index.html" class="brand">FIGURE <span>IT OUT</span></a>
+    <span class="brand-tag">Katrina's post-MBA command center</span>
+  </div>
+
+  <nav class="folder-tabs">
+    <a class="folder-tab" href="index.html">Job Search</a>
+    <a class="folder-tab" href="prep.html">Consulting Prep</a>
+    <a class="folder-tab active" href="roles.html">Roles Radar</a>
+    <a class="folder-tab" href="life.html">Life &amp; Recharge</a>
+    <a class="folder-tab" href="drills.html">Drill Room</a>
+  </nav>
+
+  <div class="sheet">
+    <header class="masthead">
+      <div>
+        <span class="case-label">Case No. RR-2026 · Market Scan</span>
+        <h1>Roles Radar</h1>
+        <p class="subject">Where to look, what to search, and this week's targets — strategy, commercial &amp; marketing</p>
+      </div>
+      <div class="docket-meta">
+        <div><strong id="today-date">—</strong></div>
+      </div>
+    </header>
+
+    <h2 style="font-size:16px; margin-bottom:2px;">Where to look</h2>
+    <p class="section-note">A mix of MBA-specific boards, firm career pages, and general boards filtered to strategy/commercial titles.</p>
+    <ul class="resource-list">
+      <li><strong>MBA-focused boards:</strong> your school's career portal, Poets&amp;Quants job board, MBA Exchange, Konsultify (consulting-specific).</li>
+      <li><strong>Big-3 &amp; MBB-adjacent:</strong> McKinsey, BCG, Bain career sites directly — many roles never get posted elsewhere.</li>
+      <li><strong>Big 4 &amp; advisory strategy arms:</strong> Deloitte S&amp;O, Accenture Strategy, PwC Strategy&amp;, EY-Parthenon.</li>
+      <li><strong>In-house strategy &amp; commercial teams:</strong> corporate strategy, S&amp;O, or "office of the CEO" roles at large tech, CPG, retail, and healthcare companies — search their careers page directly, not just LinkedIn.</li>
+      <li><strong>Marketing &amp; growth:</strong> brand management at CPG firms, growth/marketing manager roles at scale-up tech companies.</li>
+      <li><strong>General boards, filtered:</strong> LinkedIn and Handshake, with saved searches (below) rather than browsing the firehose.</li>
+    </ul>
+
+    <h2 style="font-size:16px; margin-bottom:2px;">Search terms that actually surface these roles</h2>
+    <p class="section-note">Titles vary a lot by company — rotate through these instead of just "strategy."</p>
+    <div class="chip-list">
+      <span class="chip">corporate strategy analyst</span>
+      <span class="chip">strategy &amp; operations</span>
+      <span class="chip">commercial strategy</span>
+      <span class="chip">business operations manager</span>
+      <span class="chip">chief of staff</span>
+      <span class="chip">growth marketing manager</span>
+      <span class="chip">associate brand manager</span>
+      <span class="chip">go-to-market strategy</span>
+      <span class="chip">strategic planning analyst</span>
+      <span class="chip">management consultant</span>
+    </div>
+
+    <div class="card-grid">
+      <div class="card" data-quad="targets">
+        <span class="stamp" id="stamp-targets">CLOSED</span>
+        <span class="tag">This week</span>
+        <h2>Target List</h2>
+        <ul class="tasks" data-list="targets">
+          <li><label><input type="checkbox"><span>Name 3 target companies and the specific team you want</span></label></li>
+          <li><label><input type="checkbox"><span>Find 1 alum or MBA grad at each on LinkedIn</span></label></li>
+          <li><label><input type="checkbox"><span>Save a search alert for each target company + role</span></label></li>
+          <li><label><input type="checkbox"><span>Note the application deadline or posting cadence for each</span></label></li>
+        </ul>
+        <div class="custom-row"><input type="text" placeholder="Add your own…"><button type="button">Add</button></div>
+      </div>
+
+      <div class="card" data-quad="hygiene">
+        <span class="stamp" id="stamp-hygiene">CLOSED</span>
+        <span class="tag">Weekly hygiene</span>
+        <h2>Keep the Pipeline Honest</h2>
+        <ul class="tasks" data-list="hygiene">
+          <li><label><input type="checkbox"><span>Follow up on any application older than 2 weeks with no response</span></label></li>
+          <li><label><input type="checkbox"><span>Archive roles that are dead so the tracker stays trustworthy</span></label></li>
+          <li><label><input type="checkbox"><span>Refresh your LinkedIn "open to work" preferences</span></label></li>
+          <li><label><input type="checkbox"><span>Ask one contact for a referral or introduction</span></label></li>
+        </ul>
+        <div class="custom-row"><input type="text" placeholder="Add your own…"><button type="button">Add</button></div>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <span>Resets automatically each new day · nothing leaves your browser</span>
+      <span>One good lead beats fifty cold applications.</span>
+    </footer>
+  </div>
+</div>
+
+<script>
+(function(){
+  const today = new Date();
+  document.getElementById('today-date').textContent = today.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+  const storageKey = 'roles-' + today.toISOString().slice(0,10);
+  const customKey = storageKey + '-custom';
+
+  const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+  const checkboxes = Array.from(document.querySelectorAll('.tasks input[type="checkbox"]'));
+  checkboxes.forEach((box, i) => { box.dataset.idx = i; if (saved[i]) box.checked = true; });
+
+  function quadIdFor(box){ return box.closest('.card').dataset.quad; }
+  function updateStamp(quad){
+    const list = document.querySelector('.tasks[data-list="' + quad + '"]');
+    const boxes = list.querySelectorAll('input[type="checkbox"]');
+    const allDone = boxes.length > 0 && Array.from(boxes).every(b => b.checked);
+    document.getElementById('stamp-' + quad).classList.toggle('show', allDone);
+  }
+  function persist(){
+    const state = {};
+    checkboxes.forEach((b, i) => { state[i] = b.checked; });
+    localStorage.setItem(storageKey, JSON.stringify(state));
+  }
+  checkboxes.forEach(box => {
+    box.addEventListener('change', () => { persist(); updateStamp(quadIdFor(box)); });
+  });
+  ['targets','hygiene'].forEach(updateStamp);
+
+  const customTasks = JSON.parse(localStorage.getItem(customKey) || '{}');
+  function addCustomTask(quad, text, list){
+    const li = document.createElement('li');
+    const label = document.createElement('label');
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    const span = document.createElement('span');
+    span.textContent = text;
+    label.appendChild(input); label.appendChild(span); li.appendChild(label); list.appendChild(li);
+    checkboxes.push(input);
+    input.addEventListener('change', () => { persist(); updateStamp(quad); });
+  }
+  document.querySelectorAll('.custom-row').forEach(row => {
+    const card = row.closest('.card');
+    const quad = card.dataset.quad;
+    const list = card.querySelector('.tasks');
+    const input = row.querySelector('input[type="text"]');
+    const button = row.querySelector('button');
+    (customTasks[quad] || []).forEach(text => addCustomTask(quad, text, list));
+    function submit(){
+      const text = input.value.trim();
+      if (!text) return;
+      addCustomTask(quad, text, list);
+      customTasks[quad] = customTasks[quad] || [];
+      customTasks[quad].push(text);
+      localStorage.setItem(customKey, JSON.stringify(customTasks));
+      input.value = '';
+      updateStamp(quad);
+    }
+    button.addEventListener('click', submit);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+  });
+})();
+</script>
+</body>
+</html>

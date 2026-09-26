@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure It Out — Job Search Docket</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-jobs">
+<div class="wrap">
+
+  <div class="brand-row">
+    <a href="index.html" class="brand">FIGURE <span>IT OUT</span></a>
+    <span class="brand-tag">Katrina's post-MBA command center</span>
+  </div>
+
+  <nav class="folder-tabs">
+    <a class="folder-tab active" href="index.html">Job Search</a>
+    <a class="folder-tab" href="prep.html">Consulting Prep</a>
+    <a class="folder-tab" href="roles.html">Roles Radar</a>
+    <a class="folder-tab" href="life.html">Life &amp; Recharge</a>
+    <a class="folder-tab" href="drills.html">Drill Room</a>
+  </nav>
+
+  <div class="sheet">
+    <header class="masthead">
+      <div>
+        <span class="case-label">Case No. JS-2026 · Confidential Working Draft</span>
+        <h1>Today's Docket</h1>
+        <p class="subject">Client: Katrina Hedberg Jensen, MBA — Consulting · Strategy · Marketing search</p>
+      </div>
+      <div class="docket-meta">
+        <div><strong id="today-date">—</strong></div>
+        <div>Status: <strong>Active engagement</strong></div>
+        <div>Reviewer: <strong>You</strong></div>
+      </div>
+    </header>
+
+    <p class="mantra" id="mantra">Loading today's mantra…</p>
+
+    <div class="progress-row">
+      <span id="progress-label">0 / 0 closed</span>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      <span id="progress-pct">0%</span>
+    </div>
+
+    <div class="matrix-axes">
+      <div class="y-axis-label">Career impact →</div>
+      <div>
+        <div class="card-grid">
+
+          <div class="card" data-quad="bigbets">
+            <span class="stamp" id="stamp-bigbets">CLOSED</span>
+            <span class="tag">High impact · Deep work</span>
+            <h2>Big Bets</h2>
+            <ul class="tasks" data-list="bigbets">
+              <li><label><input type="checkbox"><span>Tailor resume + cover letter to one target role</span></label></li>
+              <li><label><input type="checkbox"><span>Draft or refine your 60-second story ("Tell me about yourself")</span></label></li>
+              <li><label><input type="checkbox"><span>Run one case-interview practice set (market sizing or profitability)</span></label></li>
+              <li><label><input type="checkbox"><span>Research one target firm's latest deals or campaigns</span></label></li>
+            </ul>
+            <div class="custom-row"><input type="text" placeholder="Add your own…"><button type="button">Add</button></div>
+          </div>
+
+          <div class="card" data-quad="quickwins">
+            <span class="stamp" id="stamp-quickwins">CLOSED</span>
+            <span class="tag">High impact · Fast turnaround</span>
+            <h2>Quick Wins</h2>
+            <ul class="tasks" data-list="quickwins">
+              <li><label><input type="checkbox"><span>Submit one application before noon</span></label></li>
+              <li><label><input type="checkbox"><span>Update the job tracker spreadsheet</span></label></li>
+              <li><label><input type="checkbox"><span>Send one LinkedIn connection request with a note</span></label></li>
+              <li><label><input type="checkbox"><span>Set a job alert for a new search term</span></label></li>
+            </ul>
+            <div class="custom-row"><input type="text" placeholder="Add your own…"><button type="button">Add</button></div>
+          </div>
+
+          <div class="card" data-quad="keepwarm">
+            <span class="stamp" id="stamp-keepwarm">CLOSED</span>
+            <span class="tag">Compounding · Relationships</span>
+            <h2>Keep Warm</h2>
+            <ul class="tasks" data-list="keepwarm">
+              <li><label><input type="checkbox"><span>Book or take one coffee chat / informational call</span></label></li>
+              <li><label><input type="checkbox"><span>Send a thank-you note after a recent conversation</span></label></li>
+              <li><label><input type="checkbox"><span>Check in with one MBA classmate or professor</span></label></li>
+              <li><label><input type="checkbox"><span>Read one industry newsletter or earnings call recap</span></label></li>
+            </ul>
+            <div class="custom-row"><input type="text" placeholder="Add your own…"><button type="button">Add</button></div>
+          </div>
+
+          <div class="card" data-quad="recharge">
+            <span class="stamp" id="stamp-recharge">CLOSED</span>
+            <span class="tag">Sustains the operation</span>
+            <h2>Recharge &amp; Admin</h2>
+            <ul class="tasks" data-list="recharge">
+              <li><label><input type="checkbox"><span>Move your body for at least 20 minutes</span></label></li>
+              <li><label><input type="checkbox"><span>Inbox zero, or close to it</span></label></li>
+              <li><label><input type="checkbox"><span>Eat an actual meal away from your laptop</span></label></li>
+              <li><label><input type="checkbox"><span>Lights out by 11pm</span></label></li>
+            </ul>
+            <div class="custom-row"><input type="text" placeholder="Add your own…"><button type="button">Add</button></div>
+          </div>
+
+        </div>
+        <div class="x-axis-label">Effort / turnaround time →</div>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <span>Resets automatically each new day · nothing leaves your browser</span>
+      <span>Built one case at a time.</span>
+    </footer>
+  </div>
+</div>
+
+<script>
+(function(){
+  const today = new Date();
+  const dateStr = today.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  document.getElementById('today-date').textContent = dateStr;
+
+  const storageKey = 'docket-' + today.toISOString().slice(0,10);
+  const customKey = storageKey + '-custom';
+
+  const mantras = [
+    "Every case starts with a hypothesis. Today's is: you're worth hiring.",
+    "You don't need every door open. You need one to say yes.",
+    "MECE your to-do list, not your worth.",
+    "Momentum beats motivation. Close one item first.",
+    "A 'no' today is a data point, not a verdict.",
+    "The recruiter's calendar is not your report card.",
+    "Small deal, real deal: quick wins compound into big bets.",
+    "You survived the MBA. A cover letter is not the hard part."
+  ];
+  const dayIndex = Math.floor(today.getTime() / 86400000) % mantras.length;
+  document.getElementById('mantra').textContent = mantras[dayIndex];
+
+  const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+  const checkboxes = Array.from(document.querySelectorAll('.tasks input[type="checkbox"]'));
+
+  checkboxes.forEach((box, i) => {
+    box.dataset.idx = i;
+    if (saved[i]) box.checked = true;
+  });
+
+  function quadIdFor(box){ return box.closest('.card').dataset.quad; }
+
+  function updateStamp(quad){
+    const list = document.querySelector('.tasks[data-list="' + quad + '"]');
+    const boxes = list.querySelectorAll('input[type="checkbox"]');
+    const allDone = boxes.length > 0 && Array.from(boxes).every(b => b.checked);
+    const stamp = document.getElementById('stamp-' + quad);
+    stamp.classList.toggle('show', allDone);
+  }
+
+  function updateProgress(){
+    const total = checkboxes.length;
+    const done = checkboxes.filter(b => b.checked).length;
+    const pct = total ? Math.round((done/total)*100) : 0;
+    document.getElementById('progress-label').textContent = done + ' / ' + total + ' closed';
+    document.getElementById('progress-pct').textContent = pct + '%';
+    document.getElementById('progress-fill').style.width = pct + '%';
+  }
+
+  function persist(){
+    const state = {};
+    checkboxes.forEach((b, i) => { state[i] = b.checked; });
+    localStorage.setItem(storageKey, JSON.stringify(state));
+  }
+
+  checkboxes.forEach(box => {
+    box.addEventListener('change', () => {
+      persist();
+      updateProgress();
+      updateStamp(quadIdFor(box));
+    });
+  });
+
+  ['bigbets','quickwins','keepwarm','recharge'].forEach(updateStamp);
+  updateProgress();
+
+  const customTasks = JSON.parse(localStorage.getItem(customKey) || '{}');
+
+  function addCustomTask(quad, text, list){
+    const li = document.createElement('li');
+    const label = document.createElement('label');
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    const span = document.createElement('span');
+    span.textContent = text;
+    label.appendChild(input);
+    label.appendChild(span);
+    li.appendChild(label);
+    list.appendChild(li);
+    checkboxes.push(input);
+    input.addEventListener('change', () => {
+      persist();
+      updateProgress();
+      updateStamp(quad);
+    });
+  }
+
+  document.querySelectorAll('.custom-row').forEach(row => {
+    const card = row.closest('.card');
+    const quad = card.dataset.quad;
+    const list = card.querySelector('.tasks');
+    const input = row.querySelector('input[type="text"]');
+    const button = row.querySelector('button');
+
+    (customTasks[quad] || []).forEach(text => addCustomTask(quad, text, list));
+
+    function submit(){
+      const text = input.value.trim();
+      if (!text) return;
+      addCustomTask(quad, text, list);
+      customTasks[quad] = customTasks[quad] || [];
+      customTasks[quad].push(text);
+      localStorage.setItem(customKey, JSON.stringify(customTasks));
+      input.value = '';
+      updateProgress();
+      updateStamp(quad);
+    }
+
+    button.addEventListener('click', submit);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+  });
+
+  updateProgress();
+})();
+</script>
+</body>
+</html>

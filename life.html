@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure It Out — Life &amp; Recharge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-life">
+<div class="wrap">
+
+  <div class="brand-row">
+    <a href="index.html" class="brand">FIGURE <span>IT OUT</span></a>
+    <span class="brand-tag">Katrina's post-MBA command center</span>
+  </div>
+
+  <nav class="folder-tabs">
+    <a class="folder-tab" href="index.html">Job Search</a>
+    <a class="folder-tab" href="prep.html">Consulting Prep</a>
+    <a class="folder-tab" href="roles.html">Roles Radar</a>
+    <a class="folder-tab active" href="life.html">Life &amp; Recharge</a>
+    <a class="folder-tab" href="drills.html">Drill Room</a>
+  </nav>
+
+  <div class="sheet">
+    <header class="masthead">
+      <div>
+        <span class="case-label">Case No. LR-2026 · Out of Office</span>
+        <h1>Life &amp; Recharge</h1>
+        <p class="subject">The job search is a marathon — this is the part that keeps you able to run it</p>
+      </div>
+      <div class="docket-meta">
+        <div><strong id="today-date">—</strong></div>
+      </div>
+    </header>
+
+    <div class="stat-row">
+      <span class="stat-box"><span class="num" id="life-pct">0%</span><span class="lbl">Today</span></span>
+    </div>
+
+    <div class="card-grid thirds">
+
+      <div class="card" data-quad="body">
+        <span class="stamp" id="stamp-body">CLOSED</span>
+        <span class="tag">Body</span>
+        <h2>Move</h2>
+        <ul class="tasks" data-list="body">
+          <li><label><input type="checkbox"><span>Lift or workout, 30–40 min</span></label></li>
+          <li><label><input type="checkbox"><span>Walk, 1 hour</span></label></li>
+          <li><label><input type="checkbox"><span>Walk the dog</span></label></li>
+          <li><label><input type="checkbox"><span>Drink water like it's your job</span></label></li>
+        </ul>
+        <div class="custom-row"><input type="text" placeholder="Add your own…"><button type="button">Add</button></div>
+      </div>
+
+      <div class="card" data-quad="mind">
+        <span class="stamp" id="stamp-mind">CLOSED</span>
+        <span class="tag">Mind</span>
+        <h2>Reset</h2>
+        <ul class="tasks" data-list="mind">
+          <li><label><input type="checkbox"><span>10 minutes with no screen at all</span></label></li>
+          <li><label><input type="checkbox"><span>Journal one win and one worry</span></label></li>
+          <li><label><input type="checkbox"><span>Call or text someone who isn't job-searching</span></label></li>
+          <li><label><input type="checkbox"><span>Read for pleasure, not for a case</span></label></li>
+        </ul>
+        <div class="custom-row"><input type="text" placeholder="Add your own…"><button type="button">Add</button></div>
+      </div>
+
+      <div class="card" data-quad="home">
+        <span class="stamp" id="stamp-home">CLOSED</span>
+        <span class="tag">Home &amp; admin</span>
+        <h2>Upkeep</h2>
+        <ul class="tasks" data-list="home">
+          <li><label><input type="checkbox"><span>Cook or prep an actual meal</span></label></li>
+          <li><label><input type="checkbox"><span>Tidy one surface — desk, kitchen, whatever's loudest</span></label></li>
+          <li><label><input type="checkbox"><span>Check the budget / bank balance</span></label></li>
+          <li><label><input type="checkbox"><span>Lights out by 11pm</span></label></li>
+        </ul>
+        <div class="custom-row"><input type="text" placeholder="Add your own…"><button type="button">Add</button></div>
+      </div>
+
+    </div>
+
+    <footer class="site-footer">
+      <span>Resets automatically each new day · nothing leaves your browser</span>
+      <span>You're allowed to close the laptop.</span>
+    </footer>
+  </div>
+</div>
+
+<script>
+(function(){
+  const today = new Date();
+  document.getElementById('today-date').textContent = today.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+  const storageKey = 'life-' + today.toISOString().slice(0,10);
+  const customKey = storageKey + '-custom';
+
+  const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+  const checkboxes = Array.from(document.querySelectorAll('.tasks input[type="checkbox"]'));
+  checkboxes.forEach((box, i) => { box.dataset.idx = i; if (saved[i]) box.checked = true; });
+
+  function quadIdFor(box){ return box.closest('.card').dataset.quad; }
+  function updateStamp(quad){
+    const list = document.querySelector('.tasks[data-list="' + quad + '"]');
+    const boxes = list.querySelectorAll('input[type="checkbox"]');
+    const allDone = boxes.length > 0 && Array.from(boxes).every(b => b.checked);
+    document.getElementById('stamp-' + quad).classList.toggle('show', allDone);
+  }
+  function updatePct(){
+    const total = checkboxes.length;
+    const done = checkboxes.filter(b => b.checked).length;
+    document.getElementById('life-pct').textContent = (total ? Math.round((done/total)*100) : 0) + '%';
+  }
+  function persist(){
+    const state = {};
+    checkboxes.forEach((b, i) => { state[i] = b.checked; });
+    localStorage.setItem(storageKey, JSON.stringify(state));
+  }
+  checkboxes.forEach(box => {
+    box.addEventListener('change', () => { persist(); updateStamp(quadIdFor(box)); updatePct(); });
+  });
+  ['body','mind','home'].forEach(updateStamp);
+  updatePct();
+
+  const customTasks = JSON.parse(localStorage.getItem(customKey) || '{}');
+  function addCustomTask(quad, text, list){
+    const li = document.createElement('li');
+    const label = document.createElement('label');
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    const span = document.createElement('span');
+    span.textContent = text;
+    label.appendChild(input); label.appendChild(span); li.appendChild(label); list.appendChild(li);
+    checkboxes.push(input);
+    input.addEventListener('change', () => { persist(); updateStamp(quad); updatePct(); });
+  }
+  document.querySelectorAll('.custom-row').forEach(row => {
+    const card = row.closest('.card');
+    const quad = card.dataset.quad;
+    const list = card.querySelector('.tasks');
+    const input = row.querySelector('input[type="text"]');
+    const button = row.querySelector('button');
+    (customTasks[quad] || []).forEach(text => addCustomTask(quad, text, list));
+    function submit(){
+      const text = input.value.trim();
+      if (!text) return;
+      addCustomTask(quad, text, list);
+      customTasks[quad] = customTasks[quad] || [];
+      customTasks[quad].push(text);
+      localStorage.setItem(customKey, JSON.stringify(customTasks));
+      input.value = '';
+      updateStamp(quad);
+      updatePct();
+    }
+    button.addEventListener('click', submit);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+  });
+})();
+</script>
+</body>
+</html>

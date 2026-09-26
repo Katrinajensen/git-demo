@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure It Out — Consulting Prep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-prep">
+<div class="wrap">
+
+  <div class="brand-row">
+    <a href="index.html" class="brand">FIGURE <span>IT OUT</span></a>
+    <span class="brand-tag">Katrina's post-MBA command center</span>
+  </div>
+
+  <nav class="folder-tabs">
+    <a class="folder-tab" href="index.html">Job Search</a>
+    <a class="folder-tab active" href="prep.html">Consulting Prep</a>
+    <a class="folder-tab" href="roles.html">Roles Radar</a>
+    <a class="folder-tab" href="life.html">Life &amp; Recharge</a>
+    <a class="folder-tab" href="drills.html">Drill Room</a>
+  </nav>
+
+  <div class="sheet">
+    <header class="masthead">
+      <div>
+        <span class="case-label">Case No. CP-2026 · Daily Training Regimen</span>
+        <h1>Consulting Prep</h1>
+        <p class="subject">Reps that make case day feel routine, not rare</p>
+      </div>
+      <div class="docket-meta">
+        <div><strong id="today-date">—</strong></div>
+        <div>Program: <strong>Case-ready</strong></div>
+      </div>
+    </header>
+
+    <div class="stat-row">
+      <div class="stat-box"><span class="num" id="streak-current">0</span><span class="lbl">Day streak</span></div>
+      <div class="stat-box"><span class="num" id="streak-best">0</span><span class="lbl">Best streak</span></div>
+      <div class="stat-box"><span class="num" id="reps-today">0/5</span><span class="lbl">Today's reps</span></div>
+    </div>
+
+    <div class="card-grid">
+
+      <div class="card" data-quad="reps" style="grid-column: span 1;">
+        <span class="stamp" id="stamp-reps">CLOSED</span>
+        <span class="tag">Daily reps · same time, every day</span>
+        <h2>The Non-Negotiables</h2>
+        <ul class="tasks" data-list="reps">
+          <li><label><input type="checkbox" data-core="1"><span>20 min mental math drills (multiplication, %, division — Drill Room or RocketBlocks)</span></label></li>
+          <li><label><input type="checkbox" data-core="1"><span>20 min chart / graph reading drills</span></label></li>
+          <li><label><input type="checkbox" data-core="1"><span>1 full case, live partner or self-guided</span></label></li>
+          <li><label><input type="checkbox" data-core="1"><span>Review one framework flashcard (profitability tree, Porter's 5, 4Ps, growth levers)</span></label></li>
+          <li><label><input type="checkbox" data-core="1"><span>Skim one business news brief (WSJ / FT / The Economist)</span></label></li>
+        </ul>
+      </div>
+
+      <div class="card" data-quad="weekly">
+        <span class="stamp" id="stamp-weekly">CLOSED</span>
+        <span class="tag">Stretch · deepen the story</span>
+        <h2>This Week's Push</h2>
+        <ul class="tasks" data-list="weekly">
+          <li><label><input type="checkbox"><span>Get feedback on your last mock interview</span></label></li>
+          <li><label><input type="checkbox"><span>Rewrite your "biggest failure" story with a sharper lesson learned</span></label></li>
+          <li><label><input type="checkbox"><span>Read two recent case studies from a target firm's site</span></label></li>
+          <li><label><input type="checkbox"><span>Time yourself on a 30-minute written case</span></label></li>
+        </ul>
+        <div class="custom-row"><input type="text" placeholder="Add your own…"><button type="button">Add</button></div>
+      </div>
+
+    </div>
+
+    <p class="section-note" style="margin-top:22px;">Want the math and graph drills gamified? Head to the <a href="drills.html">Drill Room</a>.</p>
+
+    <footer class="site-footer">
+      <span>Resets automatically each new day · streak lives in your browser</span>
+      <span>Reps compound faster than resumes.</span>
+    </footer>
+  </div>
+</div>
+
+<script>
+(function(){
+  const today = new Date();
+  document.getElementById('today-date').textContent = today.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+  function ymd(d){ return d.toISOString().slice(0,10); }
+  const todayKey = ymd(today);
+  const storageKey = 'prep-' + todayKey;
+  const customKey = storageKey + '-custom';
+
+  const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+  const checkboxes = Array.from(document.querySelectorAll('.tasks input[type="checkbox"]'));
+  checkboxes.forEach((box, i) => { box.dataset.idx = i; if (saved[i]) box.checked = true; });
+
+  function quadIdFor(box){ return box.closest('.card').dataset.quad; }
+
+  function updateStamp(quad){
+    const list = document.querySelector('.tasks[data-list="' + quad + '"]');
+    const boxes = list.querySelectorAll('input[type="checkbox"]');
+    const allDone = boxes.length > 0 && Array.from(boxes).every(b => b.checked);
+    document.getElementById('stamp-' + quad).classList.toggle('show', allDone);
+  }
+
+  const coreIndices = [];
+  checkboxes.forEach((b, i) => { if (b.dataset.core === '1') coreIndices.push(i); });
+
+  function coreDoneForDate(dateKey){
+    const raw = localStorage.getItem('prep-' + dateKey);
+    if (!raw) return false;
+    const state = JSON.parse(raw);
+    return coreIndices.every(i => state[i] === true);
+  }
+
+  function computeStreak(){
+    let streak = 0;
+    let cursor = new Date(today);
+    while (true){
+      const key = ymd(cursor);
+      if (coreDoneForDate(key)){
+        streak++;
+        cursor.setDate(cursor.getDate() - 1);
+      } else {
+        break;
+      }
+    }
+    return streak;
+  }
+
+  function updateStats(){
+    const doneCore = coreIndices.filter(i => checkboxes[i].checked).length;
+    document.getElementById('reps-today').textContent = doneCore + '/' + coreIndices.length;
+
+    const streak = computeStreak();
+    document.getElementById('streak-current').textContent = streak;
+
+    const best = Math.max(streak, parseInt(localStorage.getItem('prep-best-streak') || '0', 10));
+    localStorage.setItem('prep-best-streak', String(best));
+    document.getElementById('streak-best').textContent = best;
+  }
+
+  function persist(){
+    const state = {};
+    checkboxes.forEach((b, i) => { state[i] = b.checked; });
+    localStorage.setItem(storageKey, JSON.stringify(state));
+  }
+
+  checkboxes.forEach(box => {
+    box.addEventListener('change', () => {
+      persist();
+      updateStamp(quadIdFor(box));
+      updateStats();
+    });
+  });
+
+  ['reps','weekly'].forEach(updateStamp);
+  updateStats();
+
+  const customTasks = JSON.parse(localStorage.getItem(customKey) || '{}');
+  function addCustomTask(quad, text, list){
+    const li = document.createElement('li');
+    const label = document.createElement('label');
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    const span = document.createElement('span');
+    span.textContent = text;
+    label.appendChild(input); label.appendChild(span); li.appendChild(label); list.appendChild(li);
+    checkboxes.push(input);
+    input.addEventListener('change', () => { persist(); updateStamp(quad); updateStats(); });
+  }
+
+  document.querySelectorAll('.custom-row').forEach(row => {
+    const card = row.closest('.card');
+    const quad = card.dataset.quad;
+    const list = card.querySelector('.tasks');
+    const input = row.querySelector('input[type="text"]');
+    const button = row.querySelector('button');
+    (customTasks[quad] || []).forEach(text => addCustomTask(quad, text, list));
+    function submit(){
+      const text = input.value.trim();
+      if (!text) return;
+      addCustomTask(quad, text, list);
+      customTasks[quad] = customTasks[quad] || [];
+      customTasks[quad].push(text);
+      localStorage.setItem(customKey, JSON.stringify(customTasks));
+      input.value = '';
+      updateStamp(quad);
+      updateStats();
+    }
+    button.addEventListener('click', submit);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+  });
+})();
+</script>
+</body>
+</html>
